@@ -1,5 +1,8 @@
 package app;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,6 +24,10 @@ public class GestorPacientes {
         public String toString(){
             return String.format("{Identificador: %s, Nombre: %s}", identificadorUnico, nombre);
         }
+
+        public String generaLineaCSV() {
+            return String.format("%s;%s", identificadorUnico, nombre);
+        }
     }
 
     private Map<String, Paciente> pacientes = new HashMap<>();
@@ -32,7 +39,11 @@ public class GestorPacientes {
         System.out.print("Identificador: ");
         String identificadorUnico = scanner.nextLine();
 
-        pacientes.put(identificadorUnico, new Paciente(nombre, identificadorUnico));
+        pacientes.put(identificadorUnico, new Paciente(identificadorUnico, nombre));
+    }
+
+    public Paciente getPaciente(String idPaciente) {
+        return pacientes.get(idPaciente);
     }
 
     public void modificarPaciente(){
@@ -48,6 +59,34 @@ public class GestorPacientes {
         System.out.print("Identificador: ");
         String identificadorUnico = scanner.nextLine();
         Paciente paciente = pacientes.remove(identificadorUnico);
+    }
+
+    public void crearCSV(){
+        File archivo = new File("\\db\\pacientes.csv");
+        try {
+            if(!archivo.exists()){
+                File carpeta = archivo.getParentFile();
+                carpeta.mkdirs();
+                archivo.createNewFile();
+            }else{
+                //borrar el contenido del archivo
+                new FileWriter(archivo, false).close();
+            }
+            FileWriter escritor = new FileWriter(archivo, true);
+            escritor.append("#ID;Nombre completo\n");
+            int ultimo = pacientes.size()-1;
+            pacientes.forEach((id, paciente) -> {
+                try {
+                    escritor.append(paciente.generaLineaCSV());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            escritor.close();
+        } catch (IOException e) {
+            System.out.println(String.format("Error con manejo del archivo: %s", archivo.getAbsolutePath()));
+        }
     }
 
     public void mostrarPacientes(){
