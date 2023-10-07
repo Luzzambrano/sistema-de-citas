@@ -44,6 +44,12 @@ public class GestorPacientes {
         paciente.modificar(nombre);
     }
 
+    public void borrarPaciente(){
+        System.out.print("Identificador: ");
+        String identificadorUnico = scanner.nextLine();
+        Paciente paciente = pacientes.remove(identificadorUnico);
+    }
+
     public void mostrarPacientes(){
         pacientes.forEach((id, paciente) -> paciente.imprimir());
     }
