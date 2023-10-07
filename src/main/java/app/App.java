@@ -13,11 +13,19 @@ public class App
     static GestorPacientes pacientes = new GestorPacientes();
     static GestorDoctor doctores = new GestorDoctor();
     static GestorCita citas = new GestorCita(doctores, pacientes);
+
+    static Administrador administrador;
     static void crearAdmin (){
+        administrador = new Administrador("admin", "12345");
     }
 
     static boolean validarAccesso(){
-        return true;
+        System.out.println("Usuario ");
+        String usuario = teclado.nextLine();
+        System.out.println("Password: ");
+        String pwd = teclado.nextLine();
+
+        return administrador.equals(new Administrador(usuario, pwd));
     }
 
     public static void main( String[] args )
