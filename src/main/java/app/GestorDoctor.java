@@ -24,7 +24,7 @@ public class GestorDoctor {
         }
         @Override
         public String toString(){
-            return String.format("{Identificador: %, Nombre: %, Especialidad: %}", identificadorUnico, nombre, especialidad);
+            return String.format("{Identificador: %s, Nombre: %s, Especialidad: %s}", identificadorUnico, nombre, especialidad);
         }
     }
 
